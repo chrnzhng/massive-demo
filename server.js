@@ -18,7 +18,9 @@ app.get('/', function (req, res) {
 });
 
 app.get('/incidents', function(req, res) {
-  res.send([]);
+  db.getAllIncidents(function (err, incidents) {
+    res.send(incidents);
+  });
 });
 
 app.post('/incidents', function(req, res) {
