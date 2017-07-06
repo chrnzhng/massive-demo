@@ -18,13 +18,26 @@ app.get('/', function (req, res) {
 });
 
 app.get('/incidents', function(req, res) {
-  db.getAllIncidents(function (err, incidents) {
+  var state = req.query.state;
+  ///?state=NY
+  if (state) {
+    db.getIncidentsByState([state], function(err, incidents) {
+      res.send(incidents);
+    });
+    
+  }
+  else {
+    db.getAllIncidents(function (err, incidents) {
     res.send(incidents);
   });
+  }
 });
 
 app.post('/incidents', function(req, res) {
-  res.send({id: 123});
+  var incident = req.body;
+  db.createIncident([incident.state, incident.injuryId, incident.causeId], function(err, result){
+    res.send(result[0]);
+  }); 
 });
 
 app.listen(port, function() {
